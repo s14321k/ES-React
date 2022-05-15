@@ -1,3 +1,9 @@
+//nodejs should be installed
+
+//TO create react app.
+//npx create-react-app React-app
+//cd React-app
+
 //Type 1
 //To start the server, right click on index.html and select start live server.
 
