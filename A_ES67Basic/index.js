@@ -40,14 +40,14 @@ document.getElementById('divId').innerHTML="Writen in js";
 
 //object
 let person = {
-                  name : 'sarath',
-                  walk : function()
-                          {
-                            console.log(this); //this
-                          },
-                  talk() {console.log("talk");},
-                  balk : () => {console.log("balk");}
-               };
+                name : 'sarath',
+                walk : function()
+                       {
+                          console.log(this); //this
+                        },
+                talk() {console.log("talk");},
+                balk : () => {console.log("balk");}
+              };
 
 //Dot Notation
 person.name='sarath kumar';
@@ -81,7 +81,10 @@ const square1 = function(number)
                 };
 document.getElementById('squr1').innerHTML = "Square Gettin through predicate functions " + square1(2);
 
-//using arrow
+//using arrow 
+//--Arrow functions introduce concise body syntax, or implicit return. 
+//--This allows the omission of the curly brackets and the return keyword. 
+//--Implicit return is useful for creating succinct one-line operations in map , filter , and other common array methods.
 const square2 = number => number * number;
 console.log("square2:::" + square2(2));
 const square3 = number => { var addNum = number * number; addNum = number + addNum; return addNum; }
@@ -95,7 +98,9 @@ const jobs = [
                 { id : 3, isActive : false}
              ];
 
-//using Predicate function 
+//using Predicate function
+//--A predicate function is a function that takes one value as input and returns true/false based on whether the value satisfies the condition.
+//--isEven() is a predicate function.
 const activeJobs1 = jobs.filter(function(job) { return job.isActive; });
                                                                                   //JSON.stringify makes the object to print in out put
 document.getElementById('actJobs1').innerHTML = "Active job, predicate function " + JSON.stringify(activeJobs1);
@@ -117,6 +122,8 @@ console.log(ArowItems+'/n'+funcItems);
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
 //Object Destructing and nested Object Destructing
+//--Destructuring is a JavaScript expression that allows us to extract data from arrays, objects, and maps and set them into new, distinct variables.
+//--Destructuring allows us to extract multiple properties, or items, from an array​ at a time.
 const address = {
                   street : 'Dabai',
                   city  : 'Dubai',
@@ -144,6 +151,8 @@ objDesCall(address)
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
 //Array destructuring []
+//--Destructuring in JavaScript is a simplified method of extracting multiple properties from an array by taking the structure and 
+//--deconstructing it down into its own constituent parts through assignments by using a syntax that looks similar to array literals
 
 const arrNumbs = [1,2,3];
 [num1, , num3] = arrNumbs;
@@ -151,7 +160,7 @@ console.log(num1, num3);  //prints 1 and 3
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
 //Spread Operator can be used in both array and object
-
+//--The spread operator allows us to spread the value of an array (or any iterable) across zero or more arguments in a function or elements in an array (or any iterable).
 const firstArr = [1,2,3];  console.log("Typeof "+typeof(firstArr));
 const secndArr =  [4,5,6];
 
@@ -164,7 +173,7 @@ arrConcatOP(firstArr,secndArr);
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
 //Rest Operator can be used in both array and object
-
+//--The rest parameter allows us to pass an indefinite number of parameters to a function and access them in an array.
 const filter = (...args) =>
                           {
                               return args.filter(elemnt => element === 1)
