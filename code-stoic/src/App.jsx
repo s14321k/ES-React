@@ -4,6 +4,10 @@ import FruitsArray from './components/FruitsArray'
 import FruitsObject from './components/FruitsObject'
 import UseStateCount from './components/UseStateCount'
 import UseStateObject from './components/UseStateObject'
+import UseStateArray from './components/UseStateArray'
+import ToDo from './componentstodo/ToDo'
+import Header from './componentstodo/Header'
+import './App.css'
 
 function App() {
   const seatNumbers = [2, 3, 1];
@@ -16,14 +20,16 @@ function App() {
 }
   return (
     <>
-      <HelloDemo />
+      {/* <HelloDemo />
       <Hello name = "sarath" message = "welcome to react" emoji=":P" seatNo={seatNumbers} propsCondition="true"/>
-      {/* We can send the properties as a object like this */}
       <Hello peroson={person} />
       <FruitsArray />
       <FruitsObject />
       <UseStateCount />
       <UseStateObject />
+      <UseStateArray /> */}
+      <Header />
+      <ToDo />
     </>
   )
 }

@@ -1,0 +1,73 @@
+.item {
+    width: 500px;
+    color: #353935;
+    font-size: 20px;
+    margin: 0 auto;
+}
+
+.itemName {
+    font-weight: bold;
+    padding: 20px;
+}
+
+.line {
+    border: 1px solid #cc812a
+}
+
+
+
+
+
+.noselect {
+    -webkit-touch-callout: none;
+      -webkit-user-select: none;
+       -khtml-user-select: none;
+         -moz-user-select: none;
+          -ms-user-select: none;
+              user-select: none;
+          -webkit-tap-highlight-color: transparent;
+  }
+  
+  .bbutton {
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      background: #dd6d6d;
+      margin: 0px;
+      border: none;
+      border-radius: 10px;
+      box-shadow: -5px -5px 15px #5b8c9b, 5px 5px 15px #991616, inset 5px 5px 10px #444, inset -5px -5px 10px #d40707;
+      color: #222;
+      font-size: 16px;
+      float: right;
+  }
+  
+  bbutton:hover {
+      box-shadow: -5px -5px 15px #976891, 5px 5px 15px #975e43, inset 5px 5px 10px #222, inset -5px -5px 10px #444;
+      font-size: 15px;
+      transition: 500ms;
+  }
+  
+  bbutton:focus {
+      outline: none;
+  }
+  
+  .red:hover {
+      color: #f07171;
+      text-shadow: 0px 0px 10px #f07171;
+  }
+  
+  .green:hover {
+          color: #93f071;
+      text-shadow: 0px 0px 10px #93f071;
+  }
+  
+  .blue:hover {
+      color: #71b7f0;
+      text-shadow: 0px 0px 10px #71b7f0;
+  }
+  
+  .purple:hover {
+      color: #b971f0;
+      text-shadow: 0px 0px 10px #b971f0;
+  }

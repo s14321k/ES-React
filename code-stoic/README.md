@@ -10,5 +10,5 @@ Currently, two official plugins are available:
 codevolution - from video 44
 code-stoic - from video 23
 
-code-stoic - 25 - [link](https://youtu.be/2bCqpPDRq3s?si=9H-eWpKpq2SHUYfz)
-codevolution - 47 - [link](https://youtu.be/-3lL8oyev9w?si=FV9UTUI9s7tDSRMv)
+code-stoic - 41 - [link](https://youtu.be/B1UNrmvGyPs?si=Nx5LSXnDZ8FI1dcE)
+codevolution - 49(useEffect) - [link](https://youtu.be/06Y6aJzTmXY?si=VCRkbF7eBcLELacg)
