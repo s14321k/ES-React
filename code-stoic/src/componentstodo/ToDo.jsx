@@ -8,6 +8,8 @@ export default function ToDo() {
 
     return (
         <>
+            {console.log("ToDo.jsx")}
+            {console.log(todos)}
             <Form todos={todos} setTodos={setTodos}/>
             <ToDoList todos={todos} setTodos={setTodos} />
         </>
