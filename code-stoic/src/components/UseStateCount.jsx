@@ -1,6 +1,9 @@
 import { useState } from "react"
 
 export default function UseStateCount() {
+    // useState are immutabe.
+    // Implimented on top of all the functions.
+    // We can pass any type of variables like, string, array, object.
 
     const [count, setCount] = useState(0);
     const [counts, setCounts] = useState(1);

@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 export default function UseStateArray() {
-    const [items, setItems] = useState([]);
+    const [items, setItems] = useState([]); // Using array
 
     const addItem = () => {
         setItems([... items, {

@@ -71,3 +71,7 @@
       color: #b971f0;
       text-shadow: 0px 0px 10px #b971f0;
   }
+
+  .completed {
+    text-decoration: line-through;
+  }
