@@ -4,6 +4,8 @@ import FoodList from './components/FoodList';
 import Nav from './components/Nav';
 import './App.css';
 import Container from './components/Container';
+import InnerContainer from './components/InnerContainer';
+import FoodDetail from './components/FoodDetail';
 
 
 function App() {
@@ -14,7 +16,12 @@ function App() {
       <Nav />
       <Search foodData={foodData} setFoodData={setFoodData} />
       <Container> {/* Nested container : passing the FoodList as a props */}
-        <FoodList foodData={foodData} />
+        <InnerContainer>
+          <FoodList foodData={foodData} />
+        </InnerContainer>
+        <InnerContainer>
+          <FoodDetail />
+        </InnerContainer>
       </Container>
     </>
   )

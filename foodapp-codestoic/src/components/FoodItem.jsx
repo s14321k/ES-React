@@ -7,7 +7,7 @@ export default function FoodItem({food}) {
             <p className={style.itemName}>{food.title}</p>
         </div>
         <div className={style.buttonContatiner}>
-            <button className={style.itemButton}>View Recipe</button>
+            <button onClick={() => console.log(food.id)} className={style.itemButton}>View Recipe</button>
         </div>
         
     </div>
