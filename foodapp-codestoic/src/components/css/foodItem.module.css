@@ -1,8 +1,8 @@
 .itemContatiner {
-    width: 300px;
-    border-radius: 8px;
+    width: 420px;
+    border-radius: 26px;
     box-shadow: 0 4px 6px rgb(0, 0, 0, 0.1);
-    margin: 20px;
+    margin: 30px;
     overflow: hidden;
     font-family: Polysans, sans-serif;
 }
@@ -24,9 +24,9 @@
 }
 
 .itemButton {
-    background-color: rgb(12, 221, 151);
+    background-color: rgb(82 165 141);
     border: none;
-    color: whitesmoke;
+    color: #263185f2;
     padding: 10px;
     font-size: 14px;
     font-weight: 600;

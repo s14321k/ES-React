@@ -11,16 +11,17 @@ import FoodDetail from './components/FoodDetail';
 function App() {
 
   const [foodData, setFoodData] = useState([]);
+  const [foodId, setFoodId] = useState("")
   return (
     <>
       <Nav />
       <Search foodData={foodData} setFoodData={setFoodData} />
       <Container> {/* Nested container : passing the FoodList as a props */}
         <InnerContainer>
-          <FoodList foodData={foodData} />
+          <FoodList foodData={foodData} setFoodId={setFoodId}/>
         </InnerContainer>
         <InnerContainer>
-          <FoodDetail />
+          <FoodDetail foodId={foodId} />
         </InnerContainer>
       </Container>
     </>
