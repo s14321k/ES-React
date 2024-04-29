@@ -1,21 +1,21 @@
 .fonts {
-    font-size: 70px;
-    font-weight: 600;
-    text-align: center;
-    /* background-image: linear-gradient(to left, #553c9a, #b393d3); */
-    background-image: linear-gradient(to bottom left, #553c9a, #ee4b2b);
-    color: transparent;
-    background-clip: text;
-    -webkit-background-clip: text;
-    padding: 10px;
-  }
+  font-size: 70px;
+  font-weight: 600;
+  text-align: center;
+  /* background-image: linear-gradient(to left, #553c9a, #b393d3); */
+  background-image: linear-gradient(to bottom left, #553c9a, #ee4b2b);
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  padding: 10px;
+}
 
-  .header {
-    font-size: 70px;
-    font-weight: 600;
-    color: #fdfdfe;
-    text-shadow: 0px 0px 5px #b393d3, 0px 0px 10px #b393d3, 0px 0px 10px #b393d3,
+.header {
+  font-size: 70px;
+  font-weight: 600;
+  color: #fdfdfe;
+  text-shadow: 0px 0px 5px #b393d3, 0px 0px 10px #b393d3, 0px 0px 10px #b393d3,
     0px 0px 20px #b393d3;
-    background-color: #301934;
-    text-align: center;
-  }
+  background-color: #301934;
+  text-align: center;
+}
