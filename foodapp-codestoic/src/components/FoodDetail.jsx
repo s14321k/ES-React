@@ -44,7 +44,7 @@ export default function FoodDetail({ foodId }) {
           </span>
           <span>
             {" "}
-            <strong> {food.vegan ? "🐄 Vegan" : ""} </strong>
+            <strong> {food.vegan ? "🐄 Vegan" : "🤠 Non Vegan"} </strong>
           </span>
         </div>
 
