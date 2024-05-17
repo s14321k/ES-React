@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
-import { createEmployee, getEmployee } from "../services/EmployeeService";
+import {
+  createEmployee,
+  getEmployee,
+  updateEmployeeAxios,
+} from "../services/EmployeeService";
 import { useNavigate, useParams } from "react-router-dom";
 
 export const EmployeeComponent = () => {
@@ -13,11 +17,14 @@ export const EmployeeComponent = () => {
 
   useEffect(() => {
     if (id) {
+      console.log("id== " + id);
       getEmployee(id)
         .then((response) => {
-          setFirstName(response.data.firstName);
-          setLastName(response.data.lastName);
-          setEmail(response.data.email);
+          console.log("response");
+          console.log(response);
+          setFirstName(response.firstName);
+          setLastName(response.lastName);
+          setEmail(response.email);
         })
         .catch((error) => {
           console.log(error);
@@ -37,7 +44,7 @@ export const EmployeeComponent = () => {
     setEmail(e.target.value);
   }
 
-  function saveEmployee(e) {
+  function saveOrUpdateEmployee(e) {
     e.preventDefault();
 
     // Checks the input feilds are not empty
@@ -47,10 +54,26 @@ export const EmployeeComponent = () => {
         lastName,
         email,
       };
-
+      console.log("saveOrUpdateEmployee employee");
       console.log(employee);
-      createEmployee(employee).then((response) => console.log(response.data));
-      navigator("/allEmp");
+
+      if (id) {
+        const empWithId = { ...employee, id };
+        updateEmployeeAxios(empWithId)
+          .then((respose) => {
+            // console.log(respose.data);
+            console.log(respose);
+            navigator("/");
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      } else {
+        createEmployee(employee)
+          .then((response) => console.log(response.data))
+          .catch((error) => console.error(error));
+        navigator("/allEmp");
+      }
     }
   }
 
@@ -157,7 +180,10 @@ export const EmployeeComponent = () => {
                 )}
               </div>
 
-              <button className="btn btn-success" onClick={saveEmployee}>
+              <button
+                className="btn btn-success"
+                onClick={saveOrUpdateEmployee}
+              >
                 Submit
               </button>
             </form>
