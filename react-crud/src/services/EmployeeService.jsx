@@ -64,3 +64,11 @@ export async function getEmployee(employeeId) {
   console.log(data);
   return data;
 }
+
+export async function deleteEmployee(empId) {
+  const res = await fetch(REST_BASE_URL + "emp/" + employeeId);
+  const data = await res.json();
+  console.log("Updated datas");
+  console.log(data);
+  return data;
+}
