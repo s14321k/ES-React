@@ -66,9 +66,36 @@ export async function getEmployee(employeeId) {
 }
 
 export async function deleteEmployee(empId) {
-  const res = await fetch(REST_BASE_URL + "emp/" + employeeId);
-  const data = await res.json();
-  console.log("Updated datas");
-  console.log(data);
-  return data;
+  try {
+    const res = await fetch(REST_BASE_URL + "emp/" + empId, {
+      method: 'DELETE'
+    });
+
+    if (!res.ok) {
+      throw new Error(`Error: ${res.status} ${res.statusText}`);
+    }
+
+    // const data = await res.json;
+    // console.log("Employee deleted successfully");
+    // console.log(data);
+    // return data;
+    return res;
+  } catch (error) {
+    console.error("Error deleting employee:", error);
+    throw error;
+  }
 }
+
+// export async function deleteEmployee(empId) {
+//   try {
+//     const response = await axios.delete(`${REST_BASE_URL}emp/${empId}`);
+
+//     console.log("Employee deleted successfully");
+//     console.log(response.data);
+
+//     return response.data;
+//   } catch (error) {
+//     console.error("Error deleting employee:", error.response ? error.response.data : error.message);
+//     throw error;
+//   }
+// }
