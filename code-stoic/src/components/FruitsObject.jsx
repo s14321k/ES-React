@@ -5,6 +5,7 @@ function FruitsObject() {
     { name: "Apple", price: 10, emoji: ":-)", sold: true },
     { name: "Mango", price: 9, emoji: ":-)", sold: false },
     { name: "Orange", price: 8, emoji: ":-)", sold: true },
+    { name: "grape", price: 7, emoji: ":-)", sold: false },
   ];
   return (
     <div>

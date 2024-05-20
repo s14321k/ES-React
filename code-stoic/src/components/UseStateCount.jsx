@@ -44,7 +44,7 @@ export default function UseStateCount() {
       <h1>
         Event Handler onClick in react(jsx attribute) where is onclick in js
       </h1>
-      <button onClick={handleClick}> Click here to get the message! </button>
+      <button onClick={handleClick}> Click and Check Console! </button>
       <br />
       <br />
       <br />
