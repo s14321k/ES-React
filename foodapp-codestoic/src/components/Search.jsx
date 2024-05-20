@@ -24,10 +24,15 @@ export default function Search({ foodData, setFoodData }) {
 
   useEffect(() => {
     async function fetchFood() {
-      const response = await fetch(`${URL}?query=${query}&apiKey=${API_KEY}`); //$ this is a string litteral. Using this we can create dynamic strings in javaScript
-      const data =
-        await response.json(); /* This function will be called asynchronasly before the fetch happens. So we will face the error stating that "response.json is not a function". For that we should use "async" before the function and "await" before the fetch as used above. "await" is better way than the "promise" and ".then" */
-      console.log(data.results);
+      //$ this is a string litteral. Using this we can create dynamic strings in javaScript
+      const response = await fetch(`${URL}?query=${query}&apiKey=${API_KEY}`);
+      /* This function will be called asynchronasly before the fetch happens. 
+      So we will face the error stating that "response.json is not a function". 
+      For that we should use "async" before the function and "await" before the fetch as used above. 
+      "await" is better way than the "promise" and ".then" */
+      const data = await response.json();
+      console.log("useEffect of Search component");
+      // console.log(data.results);
       setFoodData(data.results);
     }
     fetchFood();

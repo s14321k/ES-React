@@ -5,6 +5,7 @@
 //cd React-app
 
 //Type 1
+//Install Live Server by Ritwick Dey from marketplace
 //To start the server, right click on index.html and select start live server.
 
 //Type 2
@@ -13,7 +14,6 @@
 
 //Classes --> person.js and teacher.js
 //import {Teacher} from './teacher.js';
-
 
 // Topics covered
 // 1-Object
@@ -30,30 +30,32 @@
 // 12-Array destructuring []
 // 13-Object destructuring {}
 
-import {Teacher} from './teacher.js';
+import { Teacher } from "./teacher.js";
 const teacher1 = new Teacher("sarath", "BCA");
 teacher1.teach();
 
-
 console.log(document);
-document.getElementById('divId').innerHTML="Writen in js";
+document.getElementById("divId").innerHTML = "Writen in js";
 
 //object
 let person = {
-                name : 'sarath',
-                walk : function()
-                       {
-                          console.log(this); //this
-                        },
-                talk() {console.log("talk");},
-                balk : () => {console.log("balk");}
-              };
+  name: "sarath",
+  walk: function () {
+    console.log(this); //this
+  },
+  talk() {
+    console.log("talk");
+  },
+  balk: () => {
+    console.log("balk");
+  },
+};
 
 //Dot Notation
-person.name='sarath kumar';
+person.name = "sarath kumar";
 
 //Bracket Notation
-person['name']='sarathkumar';
+person["name"] = "sarathkumar";
 
 person.walk(); //here the out put will be the person object.
 person.talk(); //here the out put will be "talk"
@@ -61,122 +63,128 @@ person.balk(); //here the out put will be "balk"
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
 //Without binding
-const walk1 = person.walk;  //functions are object in JS
-walk1();  //global method without instance of object.
+const walk1 = person.walk; //functions are object in JS
+walk1(); //global method without instance of object.
 console.log(walk1);
-document.getElementById('person1').innerHTML = "Person without binding " + walk1;
+document.getElementById("person1").innerHTML =
+  "Person without binding " + walk1;
 
 //binding
 const walk2 = person.walk.bind(person);
 walk2();
 console.log(walk2);
-document.getElementById('person2').innerHTML = "Person with binding " + walk2;
+document.getElementById("person2").innerHTML = "Person with binding " + walk2;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
-
 //Predicate function
-const square1 = function(number)
-                {
-                  return number * number;
-                };
-document.getElementById('squr1').innerHTML = "Square Gettin through predicate functions " + square1(2);
+const square1 = function (number) {
+  return number * number;
+};
+document.getElementById("squr1").innerHTML =
+  "Square Gettin through predicate functions " + square1(2);
 
-//using arrow 
-//--Arrow functions introduce concise body syntax, or implicit return. 
-//--This allows the omission of the curly brackets and the return keyword. 
+//using arrow
+//--Arrow functions introduce concise body syntax, or implicit return.
+//--This allows the omission of the curly brackets and the return keyword.
 //--Implicit return is useful for creating succinct one-line operations in map , filter , and other common array methods.
-const square2 = number => number * number;
+const square2 = (number) => number * number;
 console.log("square2:::" + square2(2));
-const square3 = number => { var addNum = number * number; addNum = number + addNum; return addNum; }
+const square3 = (number) => {
+  var addNum = number * number;
+  addNum = number + addNum;
+  return addNum;
+};
 console.log("square3:::" + square3(3));
-document.getElementById('squr2').innerHTML = "Square Gettin through Arrow functions " + square2(3);
+document.getElementById("squr2").innerHTML =
+  "Square Gettin through Arrow functions " + square2(3);
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
 const jobs = [
-                { id : 1, isActive : true },
-                { id : 2, isActive : true },
-                { id : 3, isActive : false}
-             ];
+  { id: 1, isActive: true },
+  { id: 2, isActive: true },
+  { id: 3, isActive: false },
+];
 
 //using Predicate function
 //--A predicate function is a function that takes one value as input and returns true/false based on whether the value satisfies the condition.
 //--isEven() is a predicate function.
-const activeJobs1 = jobs.filter(function(job) { return job.isActive; });
-                                                                                  //JSON.stringify makes the object to print in out put
-document.getElementById('actJobs1').innerHTML = "Active job, predicate function " + JSON.stringify(activeJobs1);
+const activeJobs1 = jobs.filter(function (job) {
+  return job.isActive;
+});
+//JSON.stringify makes the object to print in out put
+document.getElementById("actJobs1").innerHTML =
+  "Active job, predicate function " + JSON.stringify(activeJobs1);
 
 //using Arrow function
-const activeJobs2 = jobs.filter(job => job.isActive);
-document.getElementById('actJobs2').innerHTML = "Active job, arrow function " + JSON.stringify(activeJobs2);
+const activeJobs2 = jobs.filter((job) => job.isActive);
+document.getElementById("actJobs2").innerHTML =
+  "Active job, arrow function " + JSON.stringify(activeJobs2);
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
 //Array.map
-const colors = ['red', 'blue', 'white'];
-const funcItems = colors.map(function(color)
-                          {
-                            return '<li>' + color + '</li>';
-                          });
+const colors = ["red", "blue", "white"];
+const funcItems = colors.map(function (color) {
+  return "<li>" + color + "</li>";
+});
 
-const ArowItems = colors.map(color => `<li>${color}</li>`);  //Template Literals(back slash which is at 1 in keyboard)
-console.log(ArowItems+'/n'+funcItems);
+const ArowItems = colors.map((color) => `<li>${color}</li>`); //Template Literals(back slash which is at 1 in keyboard)
+console.log(ArowItems + "/n" + funcItems);
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
 //Object Destructing and nested Object Destructing
 //--Destructuring is a JavaScript expression that allows us to extract data from arrays, objects, and maps and set them into new, distinct variables.
 //--Destructuring allows us to extract multiple properties, or items, from an array​ at a time.
 const address = {
-                  street : 'Dabai',
-                  city  : 'Dubai',
-                  country : 'Kabai'
-                };
+  street: "Dabai",
+  city: "Dubai",
+  country: "Kabai",
+};
 
 //Object destructuring {}
-let {street, city, country} = address;
+let { street, city, country } = address;
 console.log(street);
 console.log(city);
 console.log(country);
 
 //assigning variables
-let {street:st , city:ct, country:cn, place:pc='Tvk'} = address;  //here the place is assigned byu own. If place is available, then it gets replaced
+let { street: st, city: ct, country: cn, place: pc = "Tvk" } = address; //here the place is assigned byu own. If place is available, then it gets replaced
 console.log(st);
 console.log(ct);
 console.log(cn);
 
-function objDesCall({street, city})
-{
+function objDesCall({ street, city }) {
   console.log(`The name is ${street} and the city is ${city}`);
 }
 
-objDesCall(address)
+objDesCall(address);
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
 //Array destructuring []
-//--Destructuring in JavaScript is a simplified method of extracting multiple properties from an array by taking the structure and 
+//--Destructuring in JavaScript is a simplified method of extracting multiple properties from an array by taking the structure and
 //--deconstructing it down into its own constituent parts through assignments by using a syntax that looks similar to array literals
 
-const arrNumbs = [1,2,3];
+const arrNumbs = [1, 2, 3];
 [num1, , num3] = arrNumbs;
-console.log(num1, num3);  //prints 1 and 3
+console.log(num1, num3); //prints 1 and 3
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
 //Spread Operator can be used in both array and object
 //--The spread operator allows us to spread the value of an array (or any iterable) across zero or more arguments in a function or elements in an array (or any iterable).
-const firstArr = [1,2,3];  console.log("Typeof "+typeof(firstArr));
-const secndArr =  [4,5,6];
+const firstArr = [1, 2, 3];
+console.log("Typeof " + typeof firstArr);
+const secndArr = [4, 5, 6];
 
-const arrConcatOP = (arry1, arry2) => 
-                                    {
-                                        const combined1 = arry1.concat(arry2); //Using concadination
-                                        const combined2 = [...arry1, 'a' , ...arry2]; //Using spread operator
-                                    };
-arrConcatOP(firstArr,secndArr);
+const arrConcatOP = (arry1, arry2) => {
+  const combined1 = arry1.concat(arry2); //Using concadination
+  const combined2 = [...arry1, "a", ...arry2]; //Using spread operator
+};
+arrConcatOP(firstArr, secndArr);
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
 //Rest Operator can be used in both array and object
 //--The rest parameter allows us to pass an indefinite number of parameters to a function and access them in an array.
-const filter = (...args) =>
-                          {
-                              return args.filter(elemnt => element === 1)
-                          }
-console.log(filter(1,2,3,4));
+const filter = (...args) => {
+  return args.filter((elemnt) => element === 1);
+};
+console.log(filter(1, 2, 3, 4));
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
