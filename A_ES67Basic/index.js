@@ -23,7 +23,7 @@
 // 5-with binding
 // 6-Predicate function
 // 7-Arrow
-// 8-Array.map & Template Literals
+// 8-Array.map & Template Literals `${}`
 // 9-Object Destructing and nested Object Destructing
 // 10-Spread Operator (...three dots) to add old array in new array.
 // 11-Rest Operator (...three dots) add three dots befor function arguments. so that multiple arguments can be passed.

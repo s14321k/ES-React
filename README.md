@@ -42,3 +42,5 @@ Both Ecma Script and React Projects
 - rfce - react funtional component export.
 
 - rafce - react arrow functional component export.
+
+## To get react in html page directly
