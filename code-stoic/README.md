@@ -16,8 +16,15 @@
 - [Other refferences](#other-refferences)
 - [React](#react)
 - [React Basics](#react-basics)
-  - [Component](#component) - [Stateless / Dumb / Presentational / functional component](#stateless--dumb--presentational--functional-component) - [Stateful / Smart / Container / class component](#stateful--smart--container--class-component) - [JSX - JavaScript XML allows us to write HTML.](#jsx---javascript-xml-allows-us-to-write-html) - [Fragments \<\>\</\> (empty tag in react)](#fragments--empty-tag-in-react) - [Hooks (2018)](#hooks-2018) - [Props](#props) - [State](#state)
-  <!-- TOC -->
+  - [Component](#component)
+    - [Stateless / Dumb / Presentational / functional component](#stateless--dumb--presentational--functional-component)
+    - [Stateful / Smart / Container / class component](#stateful--smart--container--class-component)
+    - [JSX - JavaScript XML allows us to write HTML.](#jsx---javascript-xml-allows-us-to-write-html)
+    - [Fragments \<\>\</\> (empty tag in react)](#fragments--empty-tag-in-react)
+    - [Hooks (2018)](#hooks-2018)
+      - [All state explained Youtube link](#all-state-explained-youtube-link)
+    - [Props](#props)
+    - [State](#state)
 
 # React + Vite
 
@@ -150,19 +157,23 @@ A[Properties(props)] -- ES6 class --> B[HTML (JSX)]
 ### Hooks (2018)
 
 - Hooks lets us to use state and other react features without writing a class
-  - useState
-  - useEffect
-  - useContext
-    > useEffect vs useState &rarr; https://stackoverflow.com/a/53243516/11962586
-  - useMemo
-  - useCallback
-    > useEffect vs useCallback vs useMemo &rarr; https://stackoverflow.com/a/56910429/11962586
-  - useNavigate
-  - useParam
-  - useReducer
-  - useRef
-  - useLayoutEffect
-  - useImperativeHandle
+
+#### [All state explained Youtube link](https://youtu.be/LlvBzyy-558?si=xJkO8Ht4vvhTVYLc)
+
+- useState
+- useEffect
+- useContext
+  > useEffect vs useState &rarr; https://stackoverflow.com/a/53243516/11962586
+- useMemo
+- useCallback
+  > useEffect vs useCallback vs useMemo &rarr; https://stackoverflow.com/a/56910429/11962586
+- useReducer
+- useNavigate
+- useParam
+- useRef
+- useLayoutEffect
+- useImperativeHandle
+- useDebugValue
 
 ### Props
 
