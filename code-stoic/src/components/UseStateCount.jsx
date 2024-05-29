@@ -18,6 +18,7 @@ export default function UseStateCount() {
   // function decrement() {
   //     setCount(count - 1);
   // }
+
   const increment = () => {
     setCount(count + counts);
   };

@@ -19,6 +19,9 @@ function FruitsObject() {
           </li>
         ))}
         <h3>Iterating inside the fruit component</h3>
+        <div>
+          Check the price is greater than 8. Used fragments, i.e empty tag
+        </div>
         {fruitsObj.map((fruit) => (
           <Fruit
             key={fruit.name}
