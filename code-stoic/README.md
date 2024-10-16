@@ -93,10 +93,6 @@ Currently, two official plugins are available:
 
 ---
 
-# Other refferences
-
-# React
-
 # React Basics
 
 ## Component
