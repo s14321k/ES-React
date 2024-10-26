@@ -22,6 +22,12 @@ Both Ecma Script and React Projects
 
 ### To create react app new
 
+> Create vite and react directly - `npm create vite@latest app-name -- --template react`
+-   cd app-name
+-   npm install
+-   npm run dev
+
+**Other way**
 - `npm create vite`
 - create project name
 - `npm install`
