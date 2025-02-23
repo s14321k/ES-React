@@ -1,0 +1,507 @@
+// // This Pine Script™ code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// // © silvershinesarath
+
+// //@version=6
+// indicator("My script")
+// plot(close)
+
+// @version=6
+
+indicator("Enhanced Comprehensive Candlestick Strategy", overlay=true)
+
+// Input parameters for Stock Discount Analyzer
+ema_length = input.int(50, title="EMA Length", tooltip="Period for EMA trend analysis.")
+
+ema = ta.ema(close, ema_length)
+ema_trend_up = close > ema // Price above EMA indicates bullish trend
+
+// --- Input Parameters ---
+smaPeriod1 = input.int(50, title="Short SMA Period", minval=1)
+smaPeriod2 = input.int(200, title="Long SMA Period", minval=1)
+emaPeriod1 = input.int(50, title="Short EMA Period", minval=1)
+emaPeriod2 = input.int(200, title="Long EMA Period", minval=1)
+rsiPeriod = input.int(14, title="RSI Period", minval=1)
+rsiOverbought = input.int(70, title="RSI Overbought Level", minval=1)
+rsiOversold = input.int(30, title="RSI Oversold Level", minval=1)
+stochOverbought = input.float(0.8, title="Stochastic RSI Overbought", minval=0, maxval=1)
+stochOversold = input.float(0.2, title="Stochastic RSI Oversold", minval=0, maxval=1)
+bbPeriod = input.int(20, title="Bollinger Bands Period", minval=1)
+bbDev = input.float(2.0, title="Bollinger Bands Deviation", minval=0.1)
+resistanceLevel = input.float(0.0, title="Resistance Level", step=0.1)
+supportLevel = input.float(0.0, title="Support Level", step=0.1)
+
+// --- Helper Functions ---
+abs(x) => x >= 0 ? x : -x
+gapUp(prevClose, curOpen) => curOpen > prevClose
+gapDown(prevClose, curOpen) => curOpen < prevClose
+
+// --- Moving Averages -----------------------------------------------------------------------------------------------------------
+sma1 = ta.sma(close, smaPeriod1)
+sma2 = ta.sma(close, smaPeriod2)
+ema1 = ta.ema(close, emaPeriod1)
+ema2 = ta.ema(close, emaPeriod2)
+
+// --- RSI ---
+rsiValue = ta.rsi(close, rsiPeriod)
+
+// --- Stochastic RSI ---
+stochRSI = (rsiValue - ta.lowest(rsiValue, 14)) / math.max((ta.highest(rsiValue, 14) - ta.lowest(rsiValue, 14)), 1e-10)
+
+// --- MACD ---
+[macdLine, signalLine, _] = ta.macd(close, 12, 26, 9)
+
+// ATR for volatility
+atrValue = ta.atr(14)
+highVolatility = atrValue > ta.sma(atrValue, 14)
+lowVolatility = atrValue < ta.sma(atrValue, 14)
+
+
+// --------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// --- Volume Moving Average Calculation ---
+volumeSMA = ta.sma(volume, 20)
+volumeMA = ta.sma(close, 50)
+
+// --- Improved Trend Confirmation Logic ---
+isUptrend = macdLine > signalLine and rsiValue > rsiOversold and close > sma1 and sma1 > sma2 and volume > volumeSMA
+isDowntrend = macdLine < signalLine and rsiValue < rsiOverbought and close < sma1 and sma1 < sma2 and volume > volumeSMA
+
+
+
+// --- Candlestick Patterns ------------------------------------------------------------------------------------------------------------------------------------
+
+avgBodySizeBull = ta.sma(close - open, 10)
+avgBodySizeBear = ta.sma(open - close, 10)
+// Bullish Patterns
+bullishEngulfing = close[1] < open[1] and close > open and close > open[1] and open < close[1]
+bullishEngulfingStrong = close > open[1] and open < close[1] and (close - open) > 1.5 * (close[1] - open[1])
+bullishHarami = close > open and close[1] < open[1] and open > close[1] and close < open[1]
+tweezerBottom = low[1] == low and close > open
+morningStar = close[2] < open[2] and close[1] < open[1] and close > open and close > open[2]
+bullishAbandonedBaby = gapDown(close[2], open[1]) and gapUp(close[1], open)
+threeOutsideUp = close[2] < open[2] and close[1] > open[1] and close > open
+threeInsideUp = close[2] < open[2] and close[1] > open[1] and close > open[1]
+bullishKicker = close[1] < open[1] and open > close[1] and close > open
+piercingLine = close[1] < open[1] and open < close and close > (open[1] + close[1]) / 2
+hammer = close > open and (high - low) > 2 * (close - open) and (close - low) / (0.001 + high - low) > 0.6
+invertedHammer = close > open and (high - low) > 2 * (close - open) and (high - close) / (0.001 + high - low) > 0.6
+risingThreeMethods = close[4] < open[4] and close[3] > open[3] and close[2] > open[2] and close[1] > open[1] and close > close[4]
+bullishBeltHold = open == low and close > open and (close - open) > (high - low) * 0.6
+bullishMarubozu = open == low and close == high and (close - open) > (high - low) * 0.9
+longBullishMarubozu = bullishMarubozu and (close - open) > avgBodySizeBull
+
+// Bearish Patterns
+bearishEngulfing = close[1] > open[1] and close < open and close < open[1] and open > close[1]
+bearishEngulfingStrong = close < open[1] and open > close[1] and (open - close) > 1.5 * (open[1] - close[1])
+bearishHarami = close < open and close[1] > open[1] and open < close[1] and close > open[1]
+tweezerTop = high[1] == high and close < open
+eveningStar = close[2] > open[2] and close[1] > open[1] and close < open and close < open[2]
+bearishAbandonedBaby = gapUp(close[2], open[1]) and gapDown(close[1], open)
+threeOutsideDown = close[2] > open[2] and close[1] < open[1] and close < open
+threeInsideDown = close[2] > open[2] and close[1] < open[1] and close < open[1]
+hangingMan = close < open and (high - low) > 2 * (open - close) and (close - low) / (0.001 + high - low) > 0.6
+bearishKicker = close[1] > open[1] and open < close[1] and close < open
+darkCloudCover = close[1] > open[1] and open > close and close < (open[1] + close[1]) / 2
+shootingStar = close < open and (high - low) > 2 * (open - close) and (high - open) / (0.001 + high - low) > 0.6
+fallingThreeMethods = close[4] > open[4] and close[3] < open[3] and close[2] < open[2] and close[1] < open[1] and close < close[4]
+bearishBeltHold = open == high and close < open and (open - close) > (high - low) * 0.6
+bearishMarubozu = open == high and close == low and (open - close) > (high - low) * 0.9
+longBearishMarubozu = bearishMarubozu and (open - close) > avgBodySizeBear
+
+// Continuation Patterns
+threeWhiteSoldiers = close[2] < open[2] and close[1] > open[1] and close > open and close > close[1] and close[1] > close[2]
+threeBlackCrows = close[2] > open[2] and close[1] < open[1] and close < open and close < close[1] and close[1] < close[2]
+
+// Indecision Patterns
+doji = abs(close - open) <= (high - low) * 0.1
+longLeggedDoji = abs(open - close) <= 0.03 * (high - low)
+spinningTop = abs(close - open) <= (high - low) * 0.3 and (high - low) > 2 * abs(close - open)
+
+// --- Bullish Patterns ---
+// Patterns indicating potential upward movement
+risingThree = close[4] < open[4] and close > open[4] and close[1] < open[1] and close[2] < open[2] and close[3] < open[3]
+tasukiGap = close[2] > open[2] and open[1] > close[1] and close[1] > open
+matHold = close[4] > open[4] and close[3] > open[3] and close[2] < open[2] and close > open
+bullishSpinningTop = abs(close - open) < 0.5 * (high - low) and close > open
+dragonflyDoji = open == low and close == high
+
+// --- Bearish Patterns ---
+// Patterns indicating potential downward movement
+fallingThree = close[4] > open[4] and close < open[4] and close[1] > open[1] and close[2] > open[2] and close[3] > open[3]
+marubozu = open == high and close == low
+gravestoneDoji = open == high and close == low
+bearishSpinningTop = abs(close - open) < 0.5 * (high - low) and close < open
+
+// --- Neutral or Context-Dependent Patterns ---
+// Patterns that could be bullish or bearish depending on context
+insideBars = high[1] < high[2] and low[1] > low[2]
+triStar = doji[2] and doji[1] and doji
+longWicks = abs(high - close) > 2 * abs(open - close) or abs(low - close) > 2 * abs(open - close)
+
+bullishBreakout = insideBars and close > high[1]
+bearishBreakout = insideBars and close < low[1]
+
+// --- Buy and Sell Conditions ----------------------------------------------------------------------------------------------------------------------
+buySignal = (longBullishMarubozu or bullishMarubozu or bullishBeltHold or bullishEngulfing or bullishHarami or tweezerBottom or morningStar or bullishAbandonedBaby or threeOutsideUp or threeInsideUp or bullishKicker or piercingLine or hammer or invertedHammer or risingThreeMethods or threeWhiteSoldiers or risingThree or tasukiGap or matHold or bullishSpinningTop or dragonflyDoji) and isUptrend
+sellSignal = (longBearishMarubozu or bearishMarubozu or bearishBeltHold or bearishEngulfing or bearishHarami or tweezerTop or eveningStar or bearishAbandonedBaby or threeOutsideDown or threeInsideDown or hangingMan or bearishKicker or darkCloudCover or shootingStar or fallingThreeMethods or threeBlackCrows or fallingThree or marubozu or gravestoneDoji or bearishSpinningTop) and isDowntrend
+
+
+
+
+
+
+
+
+
+// --- Ichimoku Cloud Crossover ---
+// Define Ichimoku Cloud components
+conversionLine = ta.sma(high + low, 9)
+baseLine = ta.sma(high + low, 26)
+leadingSpanA = ta.sma(conversionLine + baseLine, 52)
+leadingSpanB = ta.sma(high + low, 52)
+laggingSpan = close[26]
+
+// Define the crossover conditions
+bullishIchimoku = ta.crossover(conversionLine, baseLine)
+bearishIchimoku = ta.crossunder(conversionLine, baseLine)
+
+// indicator("Ichimoku Signals", overlay=true) ---------------------------------------------------------------------------------------------------------------
+
+// Input Parameters
+conversionLength = input.int(9, title="Conversion Line Length")
+baseLength = input.int(26, title="Base Line Length")
+laggingSpanLength = input.int(52, title="Lagging Span Length")
+displacement = input.int(26, title="Displacement")
+
+// Ichimoku Calculations
+conversionLinee = (ta.highest(high, conversionLength) + ta.lowest(low, conversionLength)) / 2
+baseLinee = (ta.highest(high, baseLength) + ta.lowest(low, baseLength)) / 2
+leadLine1 = (conversionLinee + baseLinee) / 2
+leadLine2 = (ta.highest(high, laggingSpanLength) + ta.lowest(low, laggingSpanLength)) / 2
+laggingSpann = close
+
+
+// Signal Logic
+bullishSignal = ta.crossover(conversionLinee, baseLinee) and close > leadLine1
+bearishSignal = ta.crossunder(conversionLinee, baseLinee) and close < leadLine2
+
+hline(rsiOverbought, "RSI Overbought", color=#531c1c)
+hline(rsiOversold, "RSI Oversold", color=#0c490e)
+// plot(rsiValue, color=#e8e9ea, title="RSI")
+hline(stochOverbought, "Stochastic Overbought", color=color.red)
+hline(stochOversold, "Stochastic Oversold", color=color.green)
+plot(stochRSI, color=color.orange, title="Stochastic RSI")
+
+
+// === Input Parameters ===
+// Fair Value Gap Settings
+lookback = input.int(3, title="Lookback for FVG", minval=1)
+gapThreshold = input.float(0.5, title="Minimum Gap Size (%)", minval=0.1)
+
+// Liquidity Settings
+liquidityLookback = input.int(50, title="Liquidity Lookback", minval=1)
+
+// === Liquidity Zones ===
+highLiquidity = ta.highest(high, liquidityLookback)
+lowLiquidity = ta.lowest(low, liquidityLookback)
+
+
+
+// indicator("Intraday Fair Value Gap (FVG) Strategy", overlay=true)-------------
+
+// Inputs for Intraday Trading
+dayTradingEnabled = input.bool(true, title="Enable Day Trading FVGs")
+dayTradingGapSizeMultiplier = input.float(0.2, title="Gap Size Multiplier (as percentage of current range)", step=0.1)
+dayTradingColor = input.color(color.new(color.green, 80), title="Day Trading FVG Color")
+smaLength = input.int(50, title="SMA Length for Trend Confirmation", minval=1)
+gapDetectionTimeFrame = input.timeframe("5", title="Gap Detection Timeframe")  // Adjust for intraday chart resolution
+
+// Moving Average for Trend Confirmation
+sma = ta.sma(close, smaLength)
+
+// Function to detect Bullish FVG (Gap Up)
+isBullishFVG(high1, low2, gapSize) =>
+    low2 > high1 and (low2 - high1) >= gapSize and close[2] < sma[2]  // Gap up after downtrend (price below SMA)
+
+// Function to detect Bearish FVG (Gap Down)
+isBearishFVG(low1, high2, gapSize) =>
+    high2 < low1 and (low1 - high2) >= gapSize and close[2] > sma[2]  // Gap down after uptrend (price above SMA)
+
+// Calculate Dynamic Gap Size based on the percentage of the current range
+currentRange = high - low
+dynamicGapSize = currentRange * dayTradingGapSizeMultiplier
+
+// Fetching candle data (using dynamic reference logic)
+high1 = ta.valuewhen(true, high[2], 0)  // Third candle back
+low1 = ta.valuewhen(true, low[2], 0)   // Third candle back
+high2 = ta.valuewhen(true, high[1], 0) // Second candle back
+low2 = ta.valuewhen(true, low[1], 0)   // Second candle back
+high3 = high                           // Current high
+low3 = low                             // Current low
+
+// Assign the result of the functions to variables for consistency
+bullishFVG = dayTradingEnabled and isBullishFVG(high1, low2, dynamicGapSize)
+bearishFVG = dayTradingEnabled and isBearishFVG(low1, high2, dynamicGapSize)
+
+// Detect FVGs for Intraday Trading
+dayTradingGapUp = bullishFVG
+dayTradingGapDown = bearishFVG
+
+// Plot FVGs for Intraday Trading
+if dayTradingGapUp
+    box.new(left=bar_index[2], right=bar_index, top=low2, bottom=high1, bgcolor=dayTradingColor, border_width=1)
+if dayTradingGapDown
+    box.new(left=bar_index[2], right=bar_index, top=high2, bottom=low1, bgcolor=dayTradingColor, border_width=1)
+
+// Labels for FVGs
+// if dayTradingEnabled and (dayTradingGapUp or dayTradingGapDown)
+//     label.new(bar_index, high, style=dayTradingGapUp ? label.style_label_up : label.style_label_down, color=dayTradingGapUp ? color.green : color.red, textcolor=color.white)//, text=dayTradingGapUp ? "BFVG" : "BeFVG")
+
+
+
+
+
+
+
+// Input parameters
+fastMA_length = input(9, title="Fast MA Length")
+slowMA_length = input(21, title="Slow MA Length")
+BB_length = input(20, title="Bollinger Band Length")
+BB_mult = input(2.0, title="Bollinger Band Multiplier")
+ORB_range = input(15, title="ORB Opening Range (min)")
+rsiLength = input(14, title="RSI Length") // RSI Length for trend reversal
+
+// Moving Averages
+fastMA = ta.sma(close, fastMA_length)
+slowMA = ta.sma(close, slowMA_length)
+
+// Bollinger Bands
+basis = ta.sma(close, BB_length)
+dev = BB_mult * ta.stdev(close, BB_length)
+upperBB = basis + dev
+lowerBB = basis - dev
+
+// Opening Range Breakout
+var float ORB_high = na
+var float ORB_low = na
+ORB_condition = (not timeframe.isdaily)  // Check if the timeframe is intraday
+if ORB_condition
+    ORB_high := ta.highest(high, ORB_range)
+    ORB_low := ta.lowest(low, ORB_range)
+
+breakoutUp = close > ORB_high
+breakoutDown = close < ORB_low
+
+// Momentum Strategy
+momentum = ta.roc(close, 14)
+momentum_signal = momentum > 0
+
+// Reversal Strategy (Pivot Points)
+pivot_high = ta.pivothigh(high, 5, 5)
+pivot_low = ta.pivotlow(low, 5, 5)
+reversal_up = ta.crossover(close, pivot_low)
+reversal_down = ta.crossunder(close, pivot_high)
+
+// RSI for Trend Reversal
+rsi = ta.rsi(close, rsiLength)  
+overbought = 70
+oversold = 30
+rsi_reversal_up = rsi < oversold
+rsi_reversal_down = rsi > overbought
+
+// Buy & Sell Conditions
+buy_condition = ta.crossover(fastMA, slowMA) or breakoutUp or (momentum_signal and close > upperBB) or reversal_up
+sell_condition = ta.crossunder(fastMA, slowMA) or breakoutDown or (not momentum_signal and close < lowerBB) or reversal_down
+
+
+superBuy = buy_condition and rsi_reversal_up
+superSell = sell_condition and rsi_reversal_down
+
+twoSignal = buy_condition and sell_condition
+
+if sell_condition and rsi_reversal_down
+    rsi_reversal_down := false
+if buy_condition and rsi_reversal_up
+    rsi_reversal_up := false
+
+// Signal Markers
+// plotshape(series=bullishSignal and superBuy, location=location.belowbar, color=color.green, style=shape.labelup, title="Bullish Signal")
+// plotshape(series=bearishSignal and sell_condition, location=location.abovebar, color=color.red, style=shape.labeldown, title="Bearish Signal")
+// Detect Active Timeframe
+
+tf = timeframe.period
+
+// Define Lookback Periods Based on Timeframe
+liquidityLookback2 = tf == "1"  ? 10  : tf == "5"  ? 20 : tf == "15" ? 50 : tf == "45" ? 75 : tf == "D"  ? 200 : 30
+
+// Request High and Low Based on Active Timeframe
+highLiquidity2 = request.security(syminfo.tickerid, tf, ta.highest(high, liquidityLookback2))
+lowLiquidity2 = request.security(syminfo.tickerid, tf, ta.lowest(low, liquidityLookback2))
+
+
+// plotshape(series=buySignal or buy_condition or superBuy, location=location.belowbar, color=color.green, style=shape.labelup, title="Buy Signal1")
+// plotshape(series=sellSignal or sell_condition or superSell, location=location.abovebar, color=color.red, style=shape.labeldown, title="Sell Signal1")
+
+
+
+
+
+//@version=6
+// indicator("Balanced Fixed Range Volume Profile Strategy", overlay=true)
+
+// Define range for volume profile
+range_length = 100
+
+// Arrays for price levels and volumes
+var float[] price_levels = na
+var float[] volume_at_levels = na
+
+// Initialize arrays
+if na(price_levels)
+    price_levels := array.new_float()
+    volume_at_levels := array.new_float()
+
+// Persistent variables for POC, VAH, VAL
+var float poc_price = na
+var float vah_price = na
+var float val_price = na
+
+// Populate arrays after reaching `range_length`
+if bar_index >= range_length
+    array.clear(price_levels)
+    array.clear(volume_at_levels)
+
+    for i = 0 to range_length - 1
+        price = close[i]
+        vol = volume[i]
+        array.push(price_levels, price)
+        array.push(volume_at_levels, vol)
+
+    // Ensure arrays are filled before processing
+    if array.size(price_levels) == range_length and array.size(volume_at_levels) == range_length
+        total_volume = array.sum(volume_at_levels)
+
+        // Create new arrays for sorting
+        volume_map = array.new_float(0)
+        price_map = array.new_float(0)
+
+        for i = 0 to array.size(price_levels) - 1
+            array.push(price_map, array.get(price_levels, i))
+            array.push(volume_map, array.get(volume_at_levels, i))
+
+        // Sort volume and price arrays
+        array.sort(volume_map, order.ascending)
+        array.sort(price_map, order.ascending)
+
+        // Find Point of Control (POC)
+        poc_index = array.indexof(volume_map, array.max(volume_map))
+        poc_price := array.get(price_map, poc_index)
+
+        // Calculate VAH and VAL
+        value_area_volume = total_volume * 0.7
+        cumulative_volume = 0.0
+
+        for i = 0 to array.size(volume_map) - 1
+            cumulative_volume += array.get(volume_map, i)
+            if cumulative_volume >= value_area_volume
+                vah_price := array.get(price_map, i)
+                break
+            if cumulative_volume < value_area_volume
+                val_price := array.get(price_map, i)
+
+// === FILTERED BUY/SELL SIGNALS ===
+avg_volume = ta.sma(volume, 90)
+
+// **More Flexible Buy Condition**
+// - Price is at VAL or crosses above it
+// - RSI is oversold but relaxed (< 50)
+// - Volume is not strict (at least 60% of avg) 
+
+// 1 min
+// buy_signal = (close <= val_price or ta.crossover(close, val_price)) and rsi < 40 and volume > 0.8 * avg_volume
+// sell_signal = ta.crossunder(close, vah_price) and rsi > 55 and volume > 0.6 * avg_volume
+
+// 5 min
+buy_signal1 = (close <= val_price or ta.crossover(close, val_price)) and rsi < 39 and volume > 2.9 * avg_volume
+buy_signal2 = (close <= val_price or ta.crossover(close, val_price)) and rsi < 29 and volume > 0.99 * avg_volume
+buy_signal3 = (close <= val_price or ta.crossover(close, val_price)) and rsi < 22 and volume > 0.9 * avg_volume - 30
+
+sell_signal1 = ta.crossunder(close, vah_price) and rsi > 32 and volume > 0.99 * avg_volume
+sell_signal2 = ta.crossunder(close, vah_price) and rsi > 35 and volume > 0.77 * avg_volume - 30 and volume < 1 * avg_volume - 30
+sell_signal3 = ta.crossunder(close, vah_price) and rsi > 95 and volume > 0.66 * avg_volume - 5 and volume < 1 * avg_volume - 10
+
+// buy_signal = (close <= val_price or ta.crossover(close, val_price)) and rsi < 29 and volume > 0.99 * avg_volume
+// sell_signal = ta.crossunder(close, vah_price - 30) and rsi > 39 and volume > 0.55 * avg_volume
+
+// 15 min
+// buy_signal = (close <= val_price or ta.crossover(close, val_price)) and rsi < 35 and volume > 0.9 * avg_volume
+// sell_signal = ta.crossunder(close, vah_price) and rsi > 65 and volume > 0.6 * avg_volume
+
+
+
+// // **Plot Buy/Sell Signals**
+// plotshape(buy_signal1 or buy_signal2, color=color.green, style=shape.labelup, location=location.belowbar, text="B")
+// plotshape(sell_signal2 or sell_signal1, color=color.red, style=shape.labeldown, location=location.abovebar, text="S")
+
+
+// plotshape(series=buySignal or buy_condition or superBuy, location=location.belowbar, color=color.green, style=shape.labelup, title="Buy Signal1")
+// plotshape(series=sellSignal or sell_condition or superSell , location=location.abovebar, color=color.red, style=shape.labeldown, title="Sell Signal1")
+
+// // **Plot POC, VAH, and VAL**
+// plot(poc_price, color=color.blue, linewidth=2, title="POC")
+// plot(vah_price, color=color.green, linewidth=2, title="VAH")
+// plot(val_price, color=color.red, linewidth=2, title="VAL")
+
+
+//@version=6
+// strategy("Trend Reversal Strategy", overlay=true)
+
+// === 1️⃣ Identify Trend ===
+shortEMA = ta.ema(close, 9)
+longEMA = ta.ema(close, 21)
+trendUp = ta.crossover(shortEMA, longEMA)
+trendDown = ta.crossunder(shortEMA, longEMA)
+
+// === 2️⃣ Look for Trend Weakness ===
+// rsi = ta.rsi(close, 14)
+// [macdLine, signalLine, _] = ta.macd(close, 12, 26, 9)
+
+bearishDivergence = ta.highest(close, 5) > ta.highest(close, 10) and rsi < ta.highest(rsi, 10)
+bullishDivergence = ta.lowest(close, 5) < ta.lowest(close, 10) and rsi > ta.lowest(rsi, 10)
+
+// === 3️⃣ Confirm with Candlestick Patterns ===
+// bullishEngulfing = ta.candlepattern("Bullish Engulfing")
+// bearishEngulfing = ta.candlepattern("Bearish Engulfing")
+
+// === 4️⃣ Volume Confirmation ===
+avgVolume = ta.sma(volume, 20)
+volumeSpike = volume > 1.5 * avgVolume
+
+// === 5️⃣ Generate Buy & Sell Signals ===
+buySignal4 = (trendUp or bullishDivergence or bullishEngulfing) and volumeSpike
+sellSignal4 = (trendDown or bearishDivergence or bearishEngulfing) and volumeSpike
+
+
+// // **Plot Buy/Sell Signals**
+// plotshape(buy_signal1, color=color.green, style=shape.labelup, location=location.belowbar, text="B1")
+// plotshape(sell_signal1, color=color.red, style=shape.labeldown, location=location.abovebar, text="S1")
+
+// plotshape(buy_signal2, color=color.green, style=shape.labelup, location=location.belowbar, text="B2")
+// plotshape(sell_signal2, color=color.red, style=shape.labeldown, location=location.abovebar, text="S2")
+
+// === 6️⃣ Plot Buy/Sell Signals ===
+// plotshape(buySignal4, location=location.belowbar, color=color.green, style=shape.labelup, text="B3")
+// plotshape(sellSignal4, location=location.abovebar, color=color.red, style=shape.labeldown, text="S3")
+
+
+// plotshape((buy_signal1 or buy_signal2) and buySignal4, color=color.green, style=shape.labelup, location=location.belowbar, text="SB")
+// plotshape((sell_signal1 or sell_signal2) and sellSignal4, color=color.red, style=shape.labeldown, location=location.abovebar, text="SS")
+
+supBuy = buy_signal1 or buy_signal2 or buySignal4
+supSell = sell_signal1 or sell_signal2 or sellSignal4
+
+comBuy = (buySignal or rsi_reversal_up) and supBuy  // or superBuy) and supBuy
+comSell = (sellSignal or rsi_reversal_down) and supSell // or superSell) and supSell
+
+// plotshape(series=comBuy, location=location.belowbar, color=color.green, style=shape.labelup, title="Buy Signal1")
+// plotshape(series=comSell, location=location.abovebar, color=color.red, style=shape.labeldown, title="Sell Signal1")

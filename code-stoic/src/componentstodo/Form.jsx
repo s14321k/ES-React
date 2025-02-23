@@ -14,6 +14,15 @@ export default function Form({ todos, setTodos }) {
     ////// These todos will not get updated with values, because of asynchronous way, so commented
     //// console.log(todos);
 
+    // if(todo)
+    // {
+    //   const updateTodo = [...todos];
+    //   const todoIndex = updateTodo.findIndex(work => work.name === todos);
+    //   if(todoIndex === -1) {
+    //
+    //   }
+    // }
+
     // To store the previous input values, we are using spread operator and passing it to array
     setTodos([...todos, todo]);
 

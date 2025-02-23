@@ -1,0 +1,104 @@
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © MRFILARDI
+
+//@version=5
+indicator("Top/Bottom", overlay=true)
+
+devTooltip = "Deviation is a multiplier that affects how much the price should deviate from the previous pivot in order for the bar to become a new pivot."
+depthTooltip = "The minimum number of bars that will be taken into account when calculating the indicator."
+// pivots threshold
+threshold_multiplier = input.float(title="Deviation", defval=2, minval=0, tooltip=devTooltip)
+dev_threshold = ta.atr(10) / close * 100 * threshold_multiplier
+depth = input.int(title="Depth", defval=17, minval=1, tooltip=depthTooltip)
+LineColor = input.color(color.new(color.gray,0),"Line Color")
+deleteLastLine = input(false, "Show Lines")
+ShapePlot = input (true, "Plot marks")
+
+
+var line lineLast = na
+var int iLast = 0
+var int iPrev = 0
+var float pLast = 0
+var isHighLast = false // otherwise the last pivot is a low pivot
+var top = false
+var bottom = false
+
+pivots(src, length, isHigh) =>
+    l2 = length 
+    c = nz(src[length])
+    ok = true
+    for i = 0 to l2
+        if isHigh and src[i] > c
+            ok := false
+
+        if not isHigh and src[i] < c
+            ok := false
+    if ok
+        [bar_index[length], c]
+    else
+        [int(na), float(na)]
+        
+        
+[iH, pH] = pivots(high, depth , true)
+[iL, pL] = pivots(low, depth , false)
+
+
+calc_dev(base_price, price) =>
+    100 * (price - base_price) / price
+    
+    
+pivotFound(dev, isHigh, index, price) =>
+    pivotH = false
+    if isHighLast == isHigh and not na(lineLast)
+        // same direction
+        if isHighLast ? price > pLast : price < pLast
+            pivotH := true
+            line.set_xy2(lineLast, index, price)
+            [lineLast, isHighLast]
+        else
+            [line(na), bool(na)]
+    else // reverse the direction (or create the very first line)
+        if math.abs(dev) > dev_threshold
+            // price move is significant
+            id = line.new(iLast, pLast, index, price, color=LineColor, width=2, style=line.style_dashed)
+            if ShapePlot
+                if pLast > price
+                    label.new(iLast,high, color=color.red, yloc=yloc.abovebar)
+                else
+                    label.new(iLast,low,  color=color.green, yloc=yloc.belowbar)
+            [id, isHigh]
+        else
+            [line(na), bool(na)]
+
+
+if not na(iH)
+    dev = calc_dev(pLast, pH)
+    [id, isHigh] = pivotFound(dev, true, iH, pH)
+    if not na(id)
+        if id != lineLast and not deleteLastLine
+            line.delete(lineLast)
+        lineLast := id
+        isHighLast := isHigh
+        iPrev := iLast
+        iLast := iH
+        pLast := pH
+else
+    if not na(iL)
+        dev = calc_dev(pLast, pL)
+        [id, isHigh] = pivotFound(dev, false, iL, pL)
+        if not na(id)
+            if id != lineLast and not deleteLastLine
+                line.delete(lineLast)
+            lineLast := id
+            isHighLast := isHigh
+            iPrev := iLast
+            iLast := iL
+            pLast := pL
+
+
+//if ShapePlot 
+//    plotshape(iLast, style=shape.arrowup)
+
+//plotshape(top, style=shape.arrowdown,color=color.red, location=location.abovebar)
+//plotshape(bottom, style=shape.arrowup,color=color.green, location=location.belowbar)
+
